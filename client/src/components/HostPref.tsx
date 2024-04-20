@@ -22,6 +22,7 @@ const HostPref = () => {
         comfortableHosting: 2,
         price: 3000,
         role: "host",
+        uid: auth.currentUser!.uid,
       } satisfies BHostPref;
       await setDoc(doc(db, "userPref", auth.currentUser!.uid), dummyData);
       auth.setUserPref(dummyData);

@@ -66,6 +66,7 @@ export type BGuidePref = {
   comfortableHosting: number;
   price: number;
   role: BUserRole;
+  uid: string;
 };
 
 export type BHostPref = BGuidePref & {
@@ -83,4 +84,5 @@ export type BTouristPref = {
   foodHabits: "veg" | "non-veg" | "vegan";
   price: number;
   role: BUserRole;
+  uid: string;
 };
