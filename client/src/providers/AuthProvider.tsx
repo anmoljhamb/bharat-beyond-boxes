@@ -7,10 +7,13 @@ type Props = {
 
 const AuthProvider = (props: Props) => {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   function signOut(): Promise<void> {
+    setIsLoading(true);
     return new Promise((resolve) => {
       setTimeout(() => {
+        setIsLoading(false);
         setIsSignedIn(false);
         resolve();
       }, 1500);
@@ -18,8 +21,10 @@ const AuthProvider = (props: Props) => {
   }
 
   function signIn(): Promise<void> {
+    setIsLoading(true);
     return new Promise((resolve) => {
       setTimeout(() => {
+        setIsLoading(false);
         setIsSignedIn(true);
         resolve();
       }, 1500);
@@ -28,7 +33,7 @@ const AuthProvider = (props: Props) => {
 
   return (
     <>
-      <AuthContext.Provider value={{ isSignedIn, signOut, signIn }}>
+      <AuthContext.Provider value={{ isSignedIn, signOut, signIn, isLoading }}>
         {props.children}
       </AuthContext.Provider>
     </>

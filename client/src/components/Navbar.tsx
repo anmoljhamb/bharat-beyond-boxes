@@ -8,7 +8,9 @@ const Navbar = () => {
     <>
       <nav>
         {!authContext.isSignedIn && <NavbarLink text="Sign In" url="/signin" />}
-        {authContext.isSignedIn && <NavbarLink text="Sign In" url="/signout" />}
+        {authContext.isSignedIn && (
+          <NavbarLink text="Sign Out" url="/signout" />
+        )}
       </nav>
     </>
   );
