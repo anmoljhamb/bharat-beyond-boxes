@@ -20,6 +20,10 @@ const HomePage = () => {
     navigate("/user-details");
   }, [auth.userDetails, navigate]);
 
+  useEffect(() => {
+    console.log(auth.verificationDetails);
+  }, [auth.verificationDetails]);
+
   return (
     <>
       <h1>HomePage</h1>

@@ -21,6 +21,9 @@ export type BAuthContext = {
   currentUser: User | null;
   userDetails: BUserDetails | null;
   setUserDetails: (arg0: BUserDetails | null) => void;
+  verificationDetails: VerifyUserDetails | null;
+  setVerificationDetails: (arg0: VerifyUserDetails | null) => void;
+  fetchUserDetails: (user: User | null) => Promise<void>;
 };
 
 export type VerifyUserDetails = {
