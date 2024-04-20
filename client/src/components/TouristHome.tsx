@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { useAuth } from "../contexts";
 import { BGuidePref, BHostPref, BTouristPref } from "../types";
+import { initateChatWithUser } from "../utils";
 
 const TouristHome = () => {
   const [lookingFor, setLookingFor] = useState<"guide" | "host">("host");
   const [results, setResults] = useState<BGuidePref[] | BHostPref[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const auth = useAuth();
 
   useEffect(() => {
@@ -49,7 +51,26 @@ const TouristHome = () => {
       {results.length > 0 && (
         <ul>
           {results.map((userPref, index) => {
-            return <li key={index}>{`${JSON.stringify(userPref)}`}</li>;
+            return (
+              <li key={index}>
+                {`${JSON.stringify(userPref)}`}
+
+                <button
+                  className="bg-slate-500 p-5 text-white disabled:opacity-50"
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setIsLoading(true);
+                    await initateChatWithUser(
+                      auth.currentUser!.uid,
+                      userPref.uid,
+                    );
+                    setIsLoading(false);
+                  }}
+                >
+                  Chat With Them
+                </button>
+              </li>
+            );
           })}
         </ul>
       )}

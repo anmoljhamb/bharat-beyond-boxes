@@ -28,12 +28,12 @@ export const initateChatWithUser = async (
   if (docSnap.exists()) return;
   await setDoc(docRef, { messages: [] });
   await setDoc(doc(db, "userChats", currUser), {
-    hashed: {
+    [hashed]: {
       uid: targetUser,
     },
   });
   await setDoc(doc(db, "userChats", targetUser), {
-    hashed: {
+    [hashed]: {
       uid: currUser,
     },
   });

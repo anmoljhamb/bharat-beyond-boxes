@@ -19,6 +19,8 @@ const UserDetailsPage = () => {
         nationality: "india",
         phoneNumber: "+918700619766",
         isVerified: false,
+        name: auth.currentUser!.displayName!,
+        email: auth.currentUser!.email!,
       } satisfies BUserDetails;
       await setDoc(
         doc(db, "userDetails", auth.currentUser!.uid),

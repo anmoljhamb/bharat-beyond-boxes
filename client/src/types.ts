@@ -11,6 +11,8 @@ export type BUserDetails = {
   gender: Gender;
   role: BUserRole;
   isVerified: boolean;
+  name: string;
+  email: string;
 };
 
 export type BAuthContext = {
@@ -85,4 +87,16 @@ export type BTouristPref = {
   price: number;
   role: BUserRole;
   uid: string;
+};
+
+export type Chats = {
+  [hashed: string]: {
+    uid: string;
+  };
+};
+
+export type Message = {
+  content: string;
+  uid: string;
+  timestamp: number;
 };
