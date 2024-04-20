@@ -1,6 +1,6 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useAuth } from "../contexts";
-import { BGuidePref, BHostPref } from "../types";
+import { BGuidePref, BHostPref, BTouristPref } from "../types";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -29,10 +29,6 @@ const HostPref = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    console.log(auth.userPref);
-  }, [auth.userPref]);
-
   return (
     <>
       <div>HostPref</div>
@@ -42,7 +38,7 @@ const HostPref = () => {
             return (
               <li key={key}>
                 {key}:{" "}
-                {`${auth.userPref![key as keyof BHostPref | keyof BGuidePref]}`}
+                {`${auth.userPref![key as keyof BHostPref | keyof BGuidePref | keyof BTouristPref]}`}
               </li>
             );
           })}

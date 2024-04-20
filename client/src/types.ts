@@ -24,7 +24,7 @@ export type BAuthContext = {
   verificationDetails: VerifyUserDetails | null;
   setVerificationDetails: (arg0: VerifyUserDetails | null) => void;
   fetchUserDetails: (user: User | null) => Promise<void>;
-  userPref: BHostPref | BGuidePref | null;
+  userPref: BHostPref | BTouristPref | BGuidePref | null;
   setUserPref: (arg0: BHostPref | BGuidePref | null) => void;
 };
 
@@ -67,6 +67,16 @@ export type BGuidePref = {
 };
 
 export type BHostPref = BGuidePref & {
+  accommodation: Accommodation;
+  foodHabits: "veg" | "non-veg" | "vegan";
+};
+
+export type BTouristPref = {
+  destination: Destination;
+  languages: Language[];
+  interests: Interest[];
+  familyMembers: number; // stands for the number of people that are coming
+  comfortableHosting: number; // stands for the number that they'd feel comfortable with staying
   accommodation: Accommodation;
   foodHabits: "veg" | "non-veg" | "vegan";
 };

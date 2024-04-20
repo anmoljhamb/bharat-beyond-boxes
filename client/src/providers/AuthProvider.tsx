@@ -6,6 +6,7 @@ import { FirebaseError } from "firebase/app";
 import {
   BGuidePref,
   BHostPref,
+  BTouristPref,
   BUserDetails,
   VerifyUserDetails,
 } from "../types";
@@ -24,7 +25,9 @@ const AuthProvider = (props: Props) => {
   const [userDetails, setUserDetails] = useState<BUserDetails | null>(null);
   const [verificationDetails, setVerificationDetails] =
     useState<VerifyUserDetails | null>(null);
-  const [userPref, setUserPref] = useState<BGuidePref | BHostPref | null>(null);
+  const [userPref, setUserPref] = useState<
+    BGuidePref | BTouristPref | BHostPref | null
+  >(null);
 
   const loading = firebaseLoading || firestoreLoading;
 
