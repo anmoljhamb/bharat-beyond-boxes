@@ -3,7 +3,12 @@ import { AuthContext } from "../contexts/AuthContext";
 import { auth, db, provider } from "../firebase";
 import { User, signInWithPopup } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import { BUserDetails, VerifyUserDetails } from "../types";
+import {
+  BGuidePref,
+  BHostPref,
+  BUserDetails,
+  VerifyUserDetails,
+} from "../types";
 import LoadingPage from "../pages/LoadingPage";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -19,6 +24,7 @@ const AuthProvider = (props: Props) => {
   const [userDetails, setUserDetails] = useState<BUserDetails | null>(null);
   const [verificationDetails, setVerificationDetails] =
     useState<VerifyUserDetails | null>(null);
+  const [userPref, setUserPref] = useState<BGuidePref | BHostPref | null>(null);
 
   const loading = firebaseLoading || firestoreLoading;
 
@@ -30,6 +36,25 @@ const AuthProvider = (props: Props) => {
     });
     return unsub;
   }, []);
+
+  const fetchUserPref = useCallback(
+    async (user: User | null) => {
+      if (!user) {
+        if (!firebaseLoading) setFirestoreLoading(false);
+        return;
+      }
+      setIsLoading(true);
+      const docRef = doc(db, "userPref", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUserPref(docSnap.data() as BGuidePref | BHostPref);
+      } else {
+        setVerificationDetails(null);
+      }
+      setIsLoading(false);
+    },
+    [firebaseLoading],
+  );
 
   const fetchVerificationDetails = useCallback(
     async (user: User | null) => {
@@ -72,7 +97,8 @@ const AuthProvider = (props: Props) => {
   useEffect(() => {
     fetchUserDetails(currentUser);
     fetchVerificationDetails(currentUser);
-  }, [currentUser, fetchUserDetails, fetchVerificationDetails]);
+    fetchUserPref(currentUser);
+  }, [currentUser, fetchUserDetails, fetchVerificationDetails, fetchUserPref]);
 
   async function signOut(): Promise<void> {
     setIsLoading(true);
@@ -86,6 +112,7 @@ const AuthProvider = (props: Props) => {
       const result = await signInWithPopup(auth, provider);
       await fetchUserDetails(result.user);
       fetchVerificationDetails(result.user);
+      fetchUserPref(result.user);
       setCurrentUser(result.user);
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -107,6 +134,8 @@ const AuthProvider = (props: Props) => {
       <AuthContext.Provider
         value={{
           isSignedIn,
+          userPref,
+          setUserPref,
           fetchUserDetails,
           verificationDetails,
           setVerificationDetails,
