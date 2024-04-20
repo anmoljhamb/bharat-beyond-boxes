@@ -3,6 +3,9 @@ import { useAuth } from "../contexts";
 import { showMessage } from "../utils";
 import { useNavigate } from "react-router-dom";
 import { BUserDetails } from "../types";
+import HostHome from "../components/HostHome";
+import TouristHome from "../components/TouristHome";
+import GuideHome from "../components/GuideHome";
 
 const HomePage = () => {
   const auth = useAuth();
@@ -32,6 +35,11 @@ const HomePage = () => {
             );
           })}
         </ul>
+      )}
+      {auth.userDetails && auth.userDetails.role === "host" && <HostHome />}
+      {auth.userDetails && auth.userDetails.role === "guide" && <GuideHome />}
+      {auth.userDetails && auth.userDetails.role === "tourist" && (
+        <TouristHome />
       )}
     </>
   );
