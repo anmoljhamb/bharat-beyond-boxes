@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar.tsx";
 import UserDetailsPage from "./pages/UserDetailsPage.tsx";
 import ProtectedElement from "./components/ProtectedRoute.tsx";
 import VerifyPage from "./pages/VerifyPage.tsx";
+import ChatsPage from "./pages/ChatsPage.tsx";
 
 export default function App() {
   return (
@@ -36,6 +37,15 @@ export default function App() {
           element={
             <ProtectedElement
               protectedElement={<VerifyPage />}
+              unprotectedElement={<Navigate to={"/"} />}
+            />
+          }
+        />
+        <Route
+          path="/chats"
+          element={
+            <ProtectedElement
+              protectedElement={<ChatsPage />}
               unprotectedElement={<Navigate to={"/"} />}
             />
           }
