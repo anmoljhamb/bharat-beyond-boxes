@@ -5,7 +5,6 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -57,7 +56,10 @@ const ChatsPage = () => {
   }, [selectedChat]);
 
   useEffect(() => {
-    console.log(chatHistory);
+    console.log(`chatHistory: ${chatHistory}`);
+    chatHistory.forEach((chat) => {
+      console.log(chat);
+    });
   }, [chatHistory]);
 
   useEffect(() => {
@@ -113,7 +115,12 @@ const ChatsPage = () => {
       {selectedChat.length > 0 &&
         selectedChat in userChats &&
         userChats[selectedChat].uid in usersInfo && (
-          <ul>Chat with {usersInfo[userChats[selectedChat].uid].name}</ul>
+          <ul>
+            <h1> Chat with {usersInfo[userChats[selectedChat].uid].name}</h1>
+            {chatHistory.map((chat, index) => {
+              return <li key={index}>{chat.message}</li>;
+            })}
+          </ul>
         )}
     </>
   );

@@ -96,7 +96,7 @@ export type Chats = {
 };
 
 export type Message = {
-  content: string;
+  message: string;
   uid: string;
-  timestamp: number;
+  createdAt: number;
 };
