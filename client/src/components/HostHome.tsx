@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts";
-import { useState } from "react";
 
 const HostHome = () => {
   const auth = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
     <>
