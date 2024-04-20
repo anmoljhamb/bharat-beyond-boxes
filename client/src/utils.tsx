@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 export const showMessage = (message: string) => {
@@ -23,18 +23,40 @@ export const initateChatWithUser = async (
   targetUser: string,
 ) => {
   const hashed = hashUIDS(currUser, targetUser);
-  const docRef = doc(db, "chats", hashed);
-  const docSnap = await getDoc(docRef);
+  let docRef = doc(db, "chats", hashed);
+  let docSnap = await getDoc(docRef);
   if (docSnap.exists()) return;
   await setDoc(docRef, { messages: [] });
-  await setDoc(doc(db, "userChats", currUser), {
-    [hashed]: {
-      uid: targetUser,
-    },
-  });
-  await setDoc(doc(db, "userChats", targetUser), {
-    [hashed]: {
-      uid: currUser,
-    },
-  });
+  docRef = doc(db, "userChats", currUser);
+  docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) {
+    await setDoc(docRef, {
+      [hashed]: {
+        uid: targetUser,
+      },
+    });
+  } else {
+    await setDoc(docRef, {
+      ...docSnap.data(),
+      [hashed]: {
+        uid: targetUser,
+      },
+    });
+  }
+  docRef = doc(db, "userChats", targetUser);
+  docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) {
+    await setDoc(docRef, {
+      [hashed]: {
+        uid: currUser,
+      },
+    });
+  } else {
+    await setDoc(docRef, {
+      ...docSnap.data(),
+      [hashed]: {
+        uid: currUser,
+      },
+    });
+  }
 };
