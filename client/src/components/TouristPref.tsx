@@ -20,6 +20,8 @@ const TouristPref = () => {
         accommodation: "Guest House",
         familyMembers: 1,
         comfortableHosting: 3,
+        price: 5000,
+        role: "tourist",
       } satisfies BTouristPref;
       await setDoc(doc(db, "userPref", auth.currentUser!.uid), dummyData);
       auth.setUserPref(dummyData);

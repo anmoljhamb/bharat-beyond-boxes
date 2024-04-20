@@ -24,7 +24,7 @@ const HomePage = () => {
   }, [auth.userDetails, navigate]);
 
   useEffect(() => {
-    console.log(auth.verificationDetails);
+    console.log(`Verification Details: ${auth.verificationDetails}`);
   }, [auth.verificationDetails]);
 
   return (
@@ -43,11 +43,16 @@ const HomePage = () => {
           })}
         </ul>
       )}
-      {auth.userDetails && auth.userDetails.role === "host" && <HostHome />}
-      {auth.userDetails && auth.userDetails.role === "guide" && <GuideHome />}
-      {auth.userDetails && auth.userDetails.role === "tourist" && (
-        <TouristHome />
-      )}
+      {auth.userDetails &&
+        auth.userDetails.role === "host" &&
+        (auth.userPref ? <HostHome /> : "Please Add your pref")}
+      {auth.userDetails &&
+        auth.userDetails.role === "guide" &&
+        (auth.userPref ? <GuideHome /> : "Please Add your pref")}
+      {auth.userDetails &&
+        auth.userDetails.role === "tourist" &&
+        (auth.userPref ? <TouristHome /> : "Please Add your pref")}
+
       {auth.userDetails && auth.userDetails.role === "host" && <HostPref />}
       {auth.userDetails && auth.userDetails.role === "guide" && <GuidePref />}
       {auth.userDetails && auth.userDetails.role === "tourist" && (

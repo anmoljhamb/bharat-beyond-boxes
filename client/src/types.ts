@@ -64,6 +64,8 @@ export type BGuidePref = {
   interests: Interest[];
   familyMembers: number;
   comfortableHosting: number;
+  price: number;
+  role: BUserRole;
 };
 
 export type BHostPref = BGuidePref & {
@@ -79,4 +81,6 @@ export type BTouristPref = {
   comfortableHosting: number; // stands for the number that they'd feel comfortable with staying
   accommodation: Accommodation;
   foodHabits: "veg" | "non-veg" | "vegan";
+  price: number;
+  role: BUserRole;
 };
