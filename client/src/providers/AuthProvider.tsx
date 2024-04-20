@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { auth, db, provider } from "../firebase";
 import { User, signInWithPopup } from "firebase/auth";
@@ -29,13 +29,14 @@ const AuthProvider = (props: Props) => {
     return unsub;
   }, []);
 
-  useEffect(() => {
-    if (!currentUser) {
-      if (!firebaseLoading) setFirestoreLoading(false);
-      return;
-    }
-    const fetch = async () => {
-      const docRef = doc(db, "userDetails", currentUser.uid);
+  const fetchDetails = useCallback(
+    async (user: User | null) => {
+      if (!user) {
+        if (!firebaseLoading) setFirestoreLoading(false);
+        return;
+      }
+      setFirestoreLoading(true);
+      const docRef = doc(db, "userDetails", user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setUserDetails(docSnap.data() as BUserDetails);
@@ -43,9 +44,13 @@ const AuthProvider = (props: Props) => {
         setUserDetails(null);
       }
       setFirestoreLoading(false);
-    };
-    fetch();
-  }, [currentUser, firebaseLoading]);
+    },
+    [firebaseLoading],
+  );
+
+  useEffect(() => {
+    fetchDetails(currentUser);
+  }, [currentUser, fetchDetails]);
 
   async function signOut(): Promise<void> {
     setIsLoading(true);
@@ -57,6 +62,7 @@ const AuthProvider = (props: Props) => {
     setIsLoading(true);
     try {
       const result = await signInWithPopup(auth, provider);
+      await fetchDetails(result.user);
       setCurrentUser(result.user);
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -64,8 +70,9 @@ const AuthProvider = (props: Props) => {
         console.log(error.message);
       }
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   function isSignedIn() {
