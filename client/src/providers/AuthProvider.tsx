@@ -6,9 +6,13 @@ type Props = {
 };
 
 const AuthProvider = (props: Props) => {
+  const isSignedIn = false;
+
   return (
     <>
-      <AuthContext.Provider value={null}>{props.children}</AuthContext.Provider>
+      <AuthContext.Provider value={{ isSignedIn }}>
+        {props.children}
+      </AuthContext.Provider>
     </>
   );
 };
