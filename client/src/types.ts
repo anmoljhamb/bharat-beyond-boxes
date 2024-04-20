@@ -1,3 +1,5 @@
-export type BAuthContext =
-  | { isSignedIn: true; signOut: () => Promise<void> }
-  | { isSignedIn: false; signIn: () => Promise<void> };
+export type BAuthContext = {
+  isSignedIn: boolean;
+  signOut: () => Promise<void>;
+  signIn: () => Promise<void>;
+};
