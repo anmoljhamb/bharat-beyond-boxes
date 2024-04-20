@@ -44,14 +44,6 @@ const AuthProvider = (props: Props) => {
       console.error(error);
     }
     setIsLoading(false);
-    // setIsLoading(true);
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     setIsLoading(false);
-    //     setIsSignedIn(true);
-    //     resolve();
-    //   }, 1500);
-    // });
   }
 
   return (
