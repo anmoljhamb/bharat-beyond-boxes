@@ -7,6 +7,7 @@ const Navbar = () => {
   return (
     <>
       <nav>
+        <NavbarLink text="Home" url="/" />
         {!auth.isSignedIn() && <NavbarLink text="Sign In" url="/signin" />}
         {auth.isSignedIn() && <button onClick={auth.signOut}>Sign Out</button>}
       </nav>

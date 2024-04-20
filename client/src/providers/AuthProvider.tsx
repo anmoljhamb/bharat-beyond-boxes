@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { auth, provider } from "../firebase";
+import { auth, db, provider } from "../firebase";
 import { User, signInWithPopup } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { BUserDetails } from "../types";
 import LoadingPage from "../pages/LoadingPage";
+import { doc, getDoc } from "firebase/firestore";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AuthProvider = (props: Props) => {
-  // const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [firebaseLoading, setFirebaseLoading] = useState<boolean>(true);
+  const [firestoreLoading, setFirestoreLoading] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userDetails, setUserDetails] = useState<BUserDetails | null>(null);
 
-  const loading = firebaseLoading;
+  const loading = firebaseLoading || firestoreLoading;
 
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((user) => {
@@ -30,11 +31,21 @@ const AuthProvider = (props: Props) => {
 
   useEffect(() => {
     if (!currentUser) {
+      if (!firebaseLoading) setFirestoreLoading(false);
       return;
     }
-    // fetch the user details
-    setUserDetails(null);
-  }, [currentUser]);
+    const fetch = async () => {
+      const docRef = doc(db, "userDetails", currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUserDetails(docSnap.data() as BUserDetails);
+      } else {
+        setUserDetails(null);
+      }
+      setFirestoreLoading(false);
+    };
+    fetch();
+  }, [currentUser, firebaseLoading]);
 
   async function signOut(): Promise<void> {
     setIsLoading(true);
@@ -67,6 +78,7 @@ const AuthProvider = (props: Props) => {
         value={{
           isSignedIn,
           userDetails,
+          setUserDetails,
           signOut,
           signIn,
           isLoading,

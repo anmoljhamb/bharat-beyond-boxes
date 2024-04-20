@@ -8,7 +8,7 @@ type Props = {
 
 const ProtectedElement = (props: Props) => {
   const auth = useAuth();
-  if (auth.currentUser) return <>{props.protectedElement}</>;
+  if (auth.isSignedIn()) return <>{props.protectedElement}</>;
   return <>{props.unprotectedElement}</>;
 };
 
