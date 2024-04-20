@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BUserDetails, Chats } from "../types";
 import { useAuth } from "../contexts";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 
 const ChatsPage = () => {
@@ -18,23 +18,30 @@ const ChatsPage = () => {
       });
     };
 
-    const fetch = async () => {
-      const resp = await getDoc(doc(db, "userChats", auth.currentUser!.uid));
-      if (!resp.exists()) {
-        return;
-      }
-      const temp: Chats = resp.data();
-      setIsLoading(true);
-      const promises = Object.keys(temp).map((chatUid) =>
-        fetchUserInfo(temp[chatUid].uid),
-      );
-      await Promise.all(promises);
-      setIsLoading(false);
-      setUserChats(temp);
-    };
+    const unsub = onSnapshot(
+      doc(db, "userChats", auth.currentUser!.uid),
+      async (doc) => {
+        if (!doc.exists()) {
+          setUserChats({});
+          return;
+        }
+        const temp = doc.data();
+        setIsLoading(true);
+        let promises = Object.keys(temp).map((chatUid) => {
+          if (chatUid in usersInfo) {
+            return;
+          }
+          return fetchUserInfo(temp[chatUid].uid);
+        });
+        promises = promises.filter((promise) => promise !== undefined);
+        await Promise.all(promises);
+        setIsLoading(false);
+        setUserChats(temp);
+      },
+    );
 
-    fetch();
-  }, [auth.currentUser]);
+    return unsub;
+  }, [auth.currentUser, usersInfo]);
 
   return (
     <>
