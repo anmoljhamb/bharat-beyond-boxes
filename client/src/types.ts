@@ -22,3 +22,8 @@ export type BAuthContext = {
   userDetails: BUserDetails | null;
   setUserDetails: (arg0: BUserDetails | null) => void;
 };
+
+export type VerifyUserDetails = {
+  photoIdCard: string;
+  addressProof: string;
+};
