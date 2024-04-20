@@ -2,15 +2,13 @@ import NavbarLink from "./NavbarLink";
 import { useAuth } from "../contexts";
 
 const Navbar = () => {
-  const authContext = useAuth();
+  const auth = useAuth();
 
   return (
     <>
       <nav>
-        {!authContext.isSignedIn && <NavbarLink text="Sign In" url="/signin" />}
-        {authContext.isSignedIn && (
-          <NavbarLink text="Sign Out" url="/signout" />
-        )}
+        {!auth.isSignedIn() && <NavbarLink text="Sign In" url="/signin" />}
+        {auth.isSignedIn() && <button onClick={auth.signOut}>Sign Out</button>}
       </nav>
     </>
   );

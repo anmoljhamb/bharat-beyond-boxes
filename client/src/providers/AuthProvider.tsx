@@ -3,27 +3,38 @@ import { AuthContext } from "../contexts/AuthContext";
 import { auth, provider } from "../firebase";
 import { User, signInWithPopup } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
+import { BUserDetails } from "../types";
+import LoadingPage from "../pages/LoadingPage";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AuthProvider = (props: Props) => {
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  // const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [firebaseLoading, setFirebaseLoading] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [userDetails, setUserDetails] = useState<BUserDetails | null>(null);
+
+  const loading = firebaseLoading;
 
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((user) => {
-      if (user === null) {
-        setIsSignedIn(false);
-      } else {
-        setIsSignedIn(true);
-      }
+      console.log("userAuthChanged");
       setCurrentUser(user);
+      setFirebaseLoading(false);
     });
     return unsub;
   }, []);
+
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+    // fetch the user details
+    setUserDetails(null);
+  }, [currentUser]);
 
   async function signOut(): Promise<void> {
     setIsLoading(true);
@@ -46,12 +57,23 @@ const AuthProvider = (props: Props) => {
     setIsLoading(false);
   }
 
+  function isSignedIn() {
+    return currentUser !== null;
+  }
+
   return (
     <>
       <AuthContext.Provider
-        value={{ isSignedIn, signOut, signIn, isLoading, currentUser }}
+        value={{
+          isSignedIn,
+          userDetails,
+          signOut,
+          signIn,
+          isLoading,
+          currentUser,
+        }}
       >
-        {props.children}
+        {loading ? <LoadingPage /> : props.children}
       </AuthContext.Provider>
     </>
   );
