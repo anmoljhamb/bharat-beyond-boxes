@@ -6,6 +6,9 @@ import { BUserDetails } from "../types";
 import HostHome from "../components/HostHome";
 import TouristHome from "../components/TouristHome";
 import GuideHome from "../components/GuideHome";
+import TouristPref from "../components/TouristPref";
+import HostPref from "../components/HostPref";
+import GuidePref from "../components/GuidePref";
 
 const HomePage = () => {
   const auth = useAuth();
@@ -44,6 +47,11 @@ const HomePage = () => {
       {auth.userDetails && auth.userDetails.role === "guide" && <GuideHome />}
       {auth.userDetails && auth.userDetails.role === "tourist" && (
         <TouristHome />
+      )}
+      {auth.userDetails && auth.userDetails.role === "host" && <HostPref />}
+      {auth.userDetails && auth.userDetails.role === "guide" && <GuidePref />}
+      {auth.userDetails && auth.userDetails.role === "tourist" && (
+        <TouristPref />
       )}
     </>
   );

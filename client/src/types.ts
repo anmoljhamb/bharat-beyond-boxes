@@ -30,3 +30,41 @@ export type VerifyUserDetails = {
   photoIdCard: string;
   addressProof: string;
 };
+
+export type Destination =
+  | "Delhi"
+  | "Rajasthan"
+  | "Himachal Pradesh"
+  | "Uttar Pradesh"
+  | "Tamil Nadu";
+
+export type Language = "English" | "Hindi" | "Tamil" | "French" | "Spanish";
+
+export type Interest =
+  | "adventure"
+  | "arts-crafts"
+  | "culture"
+  | "entertainment"
+  | "food-and-cuisine"
+  | "heritage"
+  | "luxury"
+  | "nature"
+  | "performing-arts"
+  | "spiritual"
+  | "wedding"
+  | "yoga-wellness";
+
+export type Accommodation = string;
+
+export type BGuidePref = {
+  destination: Destination;
+  languages: Language[];
+  interests: Interest[];
+  familyMembers: number;
+  comfortableHosting: number;
+};
+
+export type BHostPref = BGuidePref & {
+  accommodation: Accommodation;
+  foodHabits: "veg" | "non-veg" | "vegan";
+};
