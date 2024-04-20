@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
-import { BUserDetails, Chats } from "../types";
+import { BUserDetails, Chats, Message } from "../types";
 import { useAuth } from "../contexts";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -13,6 +21,7 @@ const ChatsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedChat, setSelectedChat] = useState("");
+  const [chatHistory, setChatHistory] = useState<Message[]>([]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -28,6 +37,28 @@ const ChatsPage = () => {
       return { ...old, [uid]: resp.data() as BUserDetails };
     });
   };
+
+  useEffect(() => {
+    if (selectedChat.length === 0) {
+      return;
+    }
+    const q = query(
+      collection(db, "chats", selectedChat, "messages"),
+      orderBy("createdAt"),
+    );
+    const unsub = onSnapshot(q, (snapshot) => {
+      const chats: Message[] = [];
+      snapshot.forEach((doc) => {
+        chats.push(doc.data() as Message);
+      });
+      setChatHistory(chats);
+    });
+    return unsub;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    console.log(chatHistory);
+  }, [chatHistory]);
 
   useEffect(() => {
     const unsub = onSnapshot(
