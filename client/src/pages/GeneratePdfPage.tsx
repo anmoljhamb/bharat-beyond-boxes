@@ -60,10 +60,13 @@ const GeneratePdfPage = () => {
       `What are some helpline numbers for ${city}`,
       `What are cultural considerations that I should consider while travelling in ${city}?`,
     ];
-    const promises: Promise<string>[] = inputs.map((input) =>
-      getResponseFromBot(input),
-    );
-    await Promise.all(promises);
+    for (const input of inputs) {
+      await getResponseFromBot(input);
+    }
+    // const promises: Promise<string>[] = inputs.map((input) =>
+    //   getResponseFromBot(input),
+    // );
+    // await Promise.all(promises);
     setIsBotTyping(false);
   };
 
