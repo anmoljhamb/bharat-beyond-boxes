@@ -21,6 +21,7 @@ const Navbar = () => {
           <NavbarLink text="Virtual Buddy" url="/virtual-buddy" />
           <NavbarLink text="Generate PDF" url="/generate-pdf" />
           <NavbarLink text="Connect" url="/connect" />
+          <NavbarLink text="Account Details" url="/user-details" />
           {auth.isSignedIn() && <NavbarLink text="Chats" url="/chats" />}
           {!auth.isSignedIn() && (
             <Link

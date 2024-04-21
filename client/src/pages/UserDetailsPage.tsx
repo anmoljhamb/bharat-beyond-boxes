@@ -1,53 +1,43 @@
-import { FormEvent, useState } from "react";
-import { BUserDetails } from "../types";
+import { FormEvent, useContext, useState } from "react";
+import {
+  BUserDetails,
+  BUserRole,
+  Gender,
+  InitialValuesInterface,
+} from "../types";
 import { doc, setDoc } from "firebase/firestore";
 import { useAuth } from "../contexts";
 import { db } from "../firebase";
 import { BForm } from "../components/Form";
+import { userDetailsValidator } from "../validators/userDetails";
+import { MessageContext } from "../contexts/MessageContext";
+import { useNavigate } from "react-router-dom";
 
 const UserDetailsPage = () => {
   const auth = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const dummyUserData: BUserDetails = {
-        dob: "29/08/2002",
-        role: "host",
-        gender: "m",
-        nationality: "india",
-        phoneNumber: "+918700619766",
-        isVerified: false,
-        name: auth.currentUser!.displayName!,
-        email: auth.currentUser!.email!,
-      } satisfies BUserDetails;
-      await setDoc(
-        doc(db, "userDetails", auth.currentUser!.uid),
-        dummyUserData,
-      );
-      auth.setUserDetails(dummyUserData);
-    } catch (error) {
-      console.error(error);
-    }
-    setIsLoading(false);
-  };
+  const { showMessage } = useContext(MessageContext)!;
+  const navigate = useNavigate();
 
   return (
     <section className="pt-14">
-      <div className="w-[60%] flex flex-col mx-auto">
+      <div className="w-[60%] h-screen justify-center items-center flex flex-col mx-auto">
         <h1 className="text-3xl text-center">User Details Form</h1>
         <BForm
           buttonText="Save Details"
           loading={isLoading}
-          initialValues={{
-            dob: "",
-            role: "",
-            gender: "",
-            nationality: "",
-            phoneNumber: "",
-          }}
+          validationSchema={userDetailsValidator}
+          initialValues={
+            auth.userDetails
+              ? ({ ...auth.userDetails } as unknown as InitialValuesInterface)
+              : {
+                  dob: "",
+                  role: "",
+                  gender: "",
+                  nationality: "",
+                  phoneNumber: "",
+                }
+          }
           formFields={[
             {
               name: "dob",
@@ -60,8 +50,8 @@ const UserDetailsPage = () => {
               label: "Role",
               choices: [
                 { label: "Guide", value: "guide" },
-                { label: "Tourist", value: "Tourist" },
-                { label: "Host", value: "Host" },
+                { label: "Tourist", value: "tourist" },
+                { label: "Host", value: "host" },
               ],
             },
             {
@@ -85,20 +75,36 @@ const UserDetailsPage = () => {
               label: "Phone Number",
             },
           ]}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
             console.log(values);
+            setIsLoading(true);
+            try {
+              const userDetails: BUserDetails = {
+                isVerified: false,
+                name: auth.currentUser!.displayName!,
+                email: auth.currentUser!.email!,
+                gender: values.gender as Gender,
+                dob: values.dob,
+                role: values.role as BUserRole,
+                nationality: values.nationality,
+                phoneNumber: values.phoneNumber,
+              };
+              await setDoc(
+                doc(db, "userDetails", auth.currentUser!.uid),
+                userDetails,
+              );
+              auth.setUserDetails(userDetails);
+              showMessage("User Details saved successfully!", "success");
+              setTimeout(() => {
+                navigate("/connect");
+              }, 1000);
+            } catch (error) {
+              console.error(error);
+            }
+            setIsLoading(false);
           }}
         />
       </div>
-      <form onSubmit={handleOnSubmit}>
-        <button
-          disabled={isLoading}
-          className="bg-black text-white p-5 disabled:opacity-50"
-          type="submit"
-        >
-          Submit
-        </button>
-      </form>
     </section>
   );
 };
