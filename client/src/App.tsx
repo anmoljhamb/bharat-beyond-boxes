@@ -13,7 +13,8 @@ import GeneratePdfPage from "./pages/GeneratePdfPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import { useAuth } from "./contexts/index.ts";
 import HostPref from "./pages/HostPref.tsx";
-import TouristPref from "./pages/TouristPref.tsx";
+import GuidePref from "./pages/GuidePerf.tsx";
+import TouristPerf from "./pages/TouristPref.tsx";
 
 export default function App() {
   const auth = useAuth();
@@ -57,8 +58,10 @@ export default function App() {
                 protectedElement={
                   auth.userDetails!.role === "host" ? (
                     <HostPref />
+                  ) : auth.userDetails!.role === "guide" ? (
+                    <GuidePref />
                   ) : (
-                    <TouristPref />
+                    <TouristPerf />
                   )
                 }
                 unprotectedElement={<Navigate to={"/signin"} />}

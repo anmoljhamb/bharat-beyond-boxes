@@ -64,7 +64,6 @@ export type Accommodation = string;
 export type BGuidePref = {
   destination: Destination;
   languages: string[];
-  familyMembers: number;
   comfortableHosting: number;
   price: number;
   role: BUserRole;
@@ -73,6 +72,7 @@ export type BGuidePref = {
 
 export type BHostPref = BGuidePref & {
   foodHabits: "veg" | "non-veg" | "vegan";
+  familyMembers: number;
 };
 
 export type BTouristPref = {
