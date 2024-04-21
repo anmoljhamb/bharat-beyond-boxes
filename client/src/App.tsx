@@ -11,9 +11,12 @@ import ChatsPage from "./pages/ChatsPage.tsx";
 import VirtualBuddyPage from "./pages/VirtualBuddyPage.tsx";
 import GeneratePdfPage from "./pages/GeneratePdfPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
-import UserPref from "./pages/HostPref.tsx";
+import { useAuth } from "./contexts/index.ts";
+import HostPref from "./pages/HostPref.tsx";
+import TouristPref from "./pages/TouristPref.tsx";
 
 export default function App() {
+  const auth = useAuth();
   return (
     <>
       <Navbar />
@@ -49,10 +52,20 @@ export default function App() {
         <Route
           path="/user-pref"
           element={
-            <ProtectedElement
-              protectedElement={<UserPref />}
-              unprotectedElement={<Navigate to={"/signin"} />}
-            />
+            auth.userDetails ? (
+              <ProtectedElement
+                protectedElement={
+                  auth.userDetails!.role === "host" ? (
+                    <HostPref />
+                  ) : (
+                    <TouristPref />
+                  )
+                }
+                unprotectedElement={<Navigate to={"/signin"} />}
+              />
+            ) : (
+              <Navigate to={"/user-details"} />
+            )
           }
         />
         <Route

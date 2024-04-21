@@ -77,11 +77,9 @@ export type BHostPref = BGuidePref & {
 
 export type BTouristPref = {
   destination: Destination;
-  languages: Language[];
-  interests: Interest[];
+  languages: string[];
   familyMembers: number; // stands for the number of people that are coming
   comfortableHosting: number; // stands for the number that they'd feel comfortable with staying
-  accommodation: Accommodation;
   foodHabits: "veg" | "non-veg" | "vegan";
   price: number;
   role: BUserRole;
