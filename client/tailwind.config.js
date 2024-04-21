@@ -10,6 +10,10 @@ export default {
           secondary: "rgba(237, 94, 59, 1)",
         },
       },
+      backgroundImage: {
+        grad1:
+          "linear-gradient(45deg, rgba(241, 72, 0, 0.6), rgba(253, 166, 103, 0.6))",
+      },
     },
   },
   plugins: [],
