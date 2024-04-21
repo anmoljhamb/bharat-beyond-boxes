@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 type Props = {
   text: string;
@@ -6,8 +6,16 @@ type Props = {
 };
 
 const NavbarLink = (props: Props) => {
+  const location = useLocation();
+  const isActive = location.pathname === props.url;
+
   return (
-    <Link className="text-blue-500" to={props.url}>
+    <Link
+      className={
+        isActive ? "font-bold text-white md:text-lg" : "text-white md:text-lg"
+      }
+      to={props.url}
+    >
       {props.text}
     </Link>
   );
