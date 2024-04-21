@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import NotFound from "./pages/NotFound.tsx";
-import HomePage from "./pages/HomePage.tsx";
+import ConnectPage from "./pages/ConnectPage.tsx";
 import SignInPage from "./pages/SignInPage.tsx";
 import Navbar from "./components/Navbar.tsx";
 import UserDetailsPage from "./pages/UserDetailsPage.tsx";
@@ -20,7 +20,7 @@ export default function App() {
           path="/"
           element={
             <ProtectedElement
-              protectedElement={<HomePage />}
+              protectedElement={<ConnectPage />}
               unprotectedElement={<LandingPage />}
             />
           }
@@ -29,7 +29,7 @@ export default function App() {
           path="/signin"
           element={
             <ProtectedElement
-              protectedElement={<HomePage />}
+              protectedElement={<ConnectPage />}
               unprotectedElement={<SignInPage />}
             />
           }

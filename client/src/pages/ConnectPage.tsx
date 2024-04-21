@@ -10,7 +10,7 @@ import TouristPref from "../components/TouristPref";
 import HostPref from "../components/HostPref";
 import GuidePref from "../components/GuidePref";
 
-const HomePage = () => {
+const ConnectPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -62,4 +62,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ConnectPage;
