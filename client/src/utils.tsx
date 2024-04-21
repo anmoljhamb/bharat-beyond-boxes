@@ -66,3 +66,9 @@ export const initateChatWithUser = async (
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
+
+export const objectLength = <T extends Record<PropertyKey, unknown>>(
+  obj: T,
+) => {
+  return Object.keys(obj).length;
+};

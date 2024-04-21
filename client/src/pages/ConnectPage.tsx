@@ -20,7 +20,7 @@ const ConnectPage = () => {
     if (auth.userDetails) {
       return;
     }
-    showMessage("User Details do not exist");
+    showMessage("User Details do not exist", "error");
     navigate("/user-details");
   }, [auth.userDetails, navigate, showMessage]);
 

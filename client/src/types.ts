@@ -1,4 +1,5 @@
 import { User } from "firebase/auth";
+import * as Yup from "yup";
 
 export type Country = string;
 export type Gender = "m" | "f" | "o";
@@ -108,3 +109,34 @@ export interface MessageContextInterface {
     messageDuration?: number,
   ): void;
 }
+
+export interface InitialValuesInterface {
+  [key: string]: string;
+}
+
+export type FormField = {
+  name: string;
+  label: string;
+} & (OtherFormField | OptionFormField);
+
+interface OtherFormField {
+  type: "text" | "password";
+}
+
+export interface AutoCompleteOption {
+  label: string;
+  value: string;
+}
+
+interface OptionFormField {
+  type: "option";
+  choices: AutoCompleteOption[];
+  defaultValue?: AutoCompleteOption;
+}
+
+export type ValidationSchemaInterface = Yup.ObjectSchema<
+  { [key: string]: string },
+  Yup.AnyObject,
+  { [key: string]: undefined },
+  ""
+>;
