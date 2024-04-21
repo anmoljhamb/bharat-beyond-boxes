@@ -30,9 +30,18 @@ const HostHome = () => {
         </div>
       )}
       {auth.userDetails!.isVerified && (
-        <div className="text-3xl text-center">
-          Congratulations, you're verified
-        </div>
+        <>
+          <div className="text-3xl text-center">
+            Congratulations, you're verified
+          </div>
+          <p className="text-lg text-center">
+            Checkout the{" "}
+            <Link className="text-blue" to={"/chats"}>
+              Chat
+            </Link>{" "}
+            section to look out for opportunities.
+          </p>
+        </>
       )}
     </>
   );
