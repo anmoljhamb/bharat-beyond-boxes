@@ -9,6 +9,7 @@ import ProtectedElement from "./components/ProtectedRoute.tsx";
 import VerifyPage from "./pages/VerifyPage.tsx";
 import ChatsPage from "./pages/ChatsPage.tsx";
 import VirtualBuddyPage from "./pages/VirtualBuddyPage.tsx";
+import GeneratePdfPage from "./pages/GeneratePdfPage.tsx";
 
 export default function App() {
   return (
@@ -35,11 +36,20 @@ export default function App() {
         />
         <Route path="/virtual-buddy" element={<VirtualBuddyPage />} />
         <Route
+          path="/generate-pdf"
+          element={
+            <ProtectedElement
+              protectedElement={<GeneratePdfPage />}
+              unprotectedElement={<Navigate to={"/signin"} />}
+            />
+          }
+        />
+        <Route
           path="/verify"
           element={
             <ProtectedElement
               protectedElement={<VerifyPage />}
-              unprotectedElement={<Navigate to={"/"} />}
+              unprotectedElement={<Navigate to={"/signin"} />}
             />
           }
         />
@@ -48,7 +58,7 @@ export default function App() {
           element={
             <ProtectedElement
               protectedElement={<ChatsPage />}
-              unprotectedElement={<Navigate to={"/"} />}
+              unprotectedElement={<Navigate to={"/signin"} />}
             />
           }
         />
@@ -57,7 +67,7 @@ export default function App() {
           element={
             <ProtectedElement
               protectedElement={<UserDetailsPage />}
-              unprotectedElement={<Navigate to={"/"} />}
+              unprotectedElement={<Navigate to={"/signin"} />}
             />
           }
         />
