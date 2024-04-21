@@ -100,3 +100,11 @@ export type Message = {
   uid: string;
   createdAt: number;
 };
+
+export interface MessageContextInterface {
+  showMessage(
+    message: string,
+    messageType?: "error" | "info" | "success" | "warning",
+    messageDuration?: number,
+  ): void;
+}
