@@ -11,6 +11,7 @@ import ChatsPage from "./pages/ChatsPage.tsx";
 import VirtualBuddyPage from "./pages/VirtualBuddyPage.tsx";
 import GeneratePdfPage from "./pages/GeneratePdfPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import UserPref from "./pages/HostPref.tsx";
 
 export default function App() {
   return (
@@ -45,6 +46,15 @@ export default function App() {
           }
         />
         <Route path="/virtual-buddy" element={<VirtualBuddyPage />} />
+        <Route
+          path="/user-pref"
+          element={
+            <ProtectedElement
+              protectedElement={<UserPref />}
+              unprotectedElement={<Navigate to={"/signin"} />}
+            />
+          }
+        />
         <Route
           path="/generate-pdf"
           element={

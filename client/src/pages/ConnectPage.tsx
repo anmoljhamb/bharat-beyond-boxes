@@ -9,6 +9,7 @@ import TouristPref from "../components/TouristPref";
 import HostPref from "../components/HostPref";
 import GuidePref from "../components/GuidePref";
 import { MessageContext } from "../contexts/MessageContext";
+import { Link } from "react-router-dom";
 
 const ConnectPage = () => {
   const auth = useAuth();
@@ -29,21 +30,23 @@ const ConnectPage = () => {
   }, [auth.verificationDetails]);
 
   return (
-    <>
-      <h1>HomePage</h1>
-      <p>Hello, {auth.currentUser!.displayName}</p>
-      <p>{auth.currentUser!.email}</p>
-      {auth.userDetails && (
-        <ul>
-          {Object.keys(auth.userDetails!).map((key) => {
-            return (
-              <li key={key}>
-                {key}: {`${auth.userDetails![key as keyof BUserDetails]}`}
-              </li>
-            );
-          })}
-        </ul>
+    <section className="pt-14 w-full flex flex-col justify-center items-center">
+      <h1 className="text-3xl">Hello, {auth.currentUser!.displayName}</h1>
+
+      {auth.userDetails && !auth.userPref && (
+        <div className="flex flex-col justify-center items-center w-full">
+          <h2 className="text-2xl my-2">
+            Your user preferences are not found. Please Fill Them
+          </h2>
+          <Link
+            to={"/user-pref"}
+            className="bg-bg-main rounded-full px-4 py-2 text-white"
+          >
+            Set User Preferences
+          </Link>
+        </div>
       )}
+
       {auth.userDetails &&
         auth.userDetails.role === "host" &&
         (auth.userPref ? <HostHome /> : "Please Add your pref")}
@@ -59,7 +62,7 @@ const ConnectPage = () => {
       {auth.userDetails && auth.userDetails.role === "tourist" && (
         <TouristPref />
       )}
-    </>
+    </section>
   );
 };
 
