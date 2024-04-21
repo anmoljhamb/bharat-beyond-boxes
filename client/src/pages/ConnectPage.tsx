@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useAuth } from "../contexts";
-import { showMessage } from "../utils";
 import { useNavigate } from "react-router-dom";
 import { BUserDetails } from "../types";
 import HostHome from "../components/HostHome";
@@ -9,10 +8,12 @@ import GuideHome from "../components/GuideHome";
 import TouristPref from "../components/TouristPref";
 import HostPref from "../components/HostPref";
 import GuidePref from "../components/GuidePref";
+import { MessageContext } from "../contexts/MessageContext";
 
 const ConnectPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
+  const { showMessage } = useContext(MessageContext)!;
 
   useEffect(() => {
     console.log(auth.userDetails);
@@ -21,7 +22,7 @@ const ConnectPage = () => {
     }
     showMessage("User Details do not exist");
     navigate("/user-details");
-  }, [auth.userDetails, navigate]);
+  }, [auth.userDetails, navigate, showMessage]);
 
   useEffect(() => {
     console.log(`Verification Details: ${auth.verificationDetails}`);

@@ -29,23 +29,47 @@ Start chatting now and unlock the
 secrets of incredible India!"
             image={LandingCard2}
           />
-          {auth.userDetails!.role === "guide" && (
-            <HomeCard
-              url="/connect"
-              heading="Guide a Tourist"
-              para="Be the Host with the Most! Roll out the welcome mat for international guests and make memories together. Cook up cultural feasts and embark on sightseeing adventures.
+          {auth.userDetails && (
+            <>
+              {auth.userDetails!.role === "host" && (
+                <HomeCard
+                  url="/connect"
+                  heading="Host"
+                  para="Be the Host with the Most! Roll out the welcome mat for international guests and make memories together. Cook up cultural feasts and embark on sightseeing adventures.
 Dive into global friendships that'll have you exchanging tales and travel tips 'round the clock!
 "
-              image={LandingCard3}
-            />
+                  image={LandingCard3}
+                />
+              )}
+              {auth.userDetails!.role === "guide" && (
+                <HomeCard
+                  url="/connect"
+                  heading="Guide a Tourist"
+                  para="Be the Host with the Most! Roll out the welcome mat for international guests and make memories together. Cook up cultural feasts and embark on sightseeing adventures.
+Dive into global friendships that'll have you exchanging tales and travel tips 'round the clock!
+"
+                  image={LandingCard3}
+                />
+              )}
+              {auth.userDetails!.role === "tourist" && (
+                <HomeCard
+                  url="/connect"
+                  heading="Cultural Exchanges"
+                  para="Meet Your Match! Swipe through verified local host families eager to share their culture and make a new friend. Plan the Fun: Team up to craft activities that'll have you swapping stories and traditions 'til dawn. From shared dinners to dance-offs, build bonds that last a lifetime and cross borders."
+                  image={LandingCard4}
+                />
+              )}
+            </>
           )}
-          {auth.userDetails!.role === "tourist" && (
-            <HomeCard
-              url="/connect"
-              heading="Cultural Exchanges"
-              para="Meet Your Match! Swipe through verified local host families eager to share their culture and make a new friend. Plan the Fun: Team up to craft activities that'll have you swapping stories and traditions 'til dawn. From shared dinners to dance-offs, build bonds that last a lifetime and cross borders."
-              image={LandingCard4}
-            />
+          {!auth.userDetails && (
+            <>
+              <HomeCard
+                url="/connect"
+                heading="Cultural Exchanges"
+                para="Meet Your Match! Swipe through verified local host families eager to share their culture and make a new friend. Plan the Fun: Team up to craft activities that'll have you swapping stories and traditions 'til dawn. From shared dinners to dance-offs, build bonds that last a lifetime and cross borders."
+                image={LandingCard4}
+              />
+            </>
           )}
         </div>
       </section>
