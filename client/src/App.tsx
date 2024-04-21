@@ -8,6 +8,7 @@ import UserDetailsPage from "./pages/UserDetailsPage.tsx";
 import ProtectedElement from "./components/ProtectedRoute.tsx";
 import VerifyPage from "./pages/VerifyPage.tsx";
 import ChatsPage from "./pages/ChatsPage.tsx";
+import VirtualBuddyPage from "./pages/VirtualBuddyPage.tsx";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
             />
           }
         />
+        <Route path="/virtual-buddy" element={<VirtualBuddyPage />} />
         <Route
           path="/verify"
           element={

@@ -1,5 +1,7 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export const showMessage = (message: string) => {
   alert(message);
@@ -59,4 +61,8 @@ export const initateChatWithUser = async (
       },
     });
   }
+};
+
+export const cn = (...inputs: ClassValue[]) => {
+  return twMerge(clsx(inputs));
 };
