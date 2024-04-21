@@ -10,6 +10,7 @@ import VerifyPage from "./pages/VerifyPage.tsx";
 import ChatsPage from "./pages/ChatsPage.tsx";
 import VirtualBuddyPage from "./pages/VirtualBuddyPage.tsx";
 import GeneratePdfPage from "./pages/GeneratePdfPage.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
 export default function App() {
   return (
@@ -20,8 +21,17 @@ export default function App() {
           path="/"
           element={
             <ProtectedElement
-              protectedElement={<ConnectPage />}
+              protectedElement={<HomePage />}
               unprotectedElement={<LandingPage />}
+            />
+          }
+        />
+        <Route
+          path="/connect"
+          element={
+            <ProtectedElement
+              protectedElement={<ConnectPage />}
+              unprotectedElement={<Navigate to={"/signin"} />}
             />
           }
         />
