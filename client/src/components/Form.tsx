@@ -18,7 +18,7 @@ interface PropsInterface {
   extendForm?: JSX.Element;
 }
 
-export const Form = ({
+export const BForm = ({
   initialValues,
   formFields,
   buttonText,
