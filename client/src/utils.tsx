@@ -15,7 +15,7 @@ export const uploadImage = (): Promise<void> => {
   });
 };
 
-const hashUIDS = (str1: string, str2: string) => {
+export const hashUIDS = (str1: string, str2: string) => {
   if (str1 < str2) return str1 + str2;
   else return str2 + str1;
 };

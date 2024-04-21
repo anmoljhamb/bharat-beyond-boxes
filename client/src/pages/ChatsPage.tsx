@@ -89,7 +89,7 @@ const ChatsPage = () => {
   }, [auth.currentUser]);
 
   return (
-    <>
+    <section className="pt-14">
       <div>ChatsPage</div>
       {Object.keys(userChats).length === 0 && <p>Chats Not Found!</p>}
       {Object.keys(userChats).length > 0 && (
@@ -122,7 +122,7 @@ const ChatsPage = () => {
             })}
           </ul>
         )}
-    </>
+    </section>
   );
 };
 
