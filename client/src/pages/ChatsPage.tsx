@@ -21,7 +21,7 @@ const ChatsPage = () => {
   const auth = useAuth();
   const [userChats, setUserChats] = useState<Chats>({});
   const [usersInfo, setUsersInfo] = useState<Record<string, BUserDetails>>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedChat, setSelectedChat] = useState("");

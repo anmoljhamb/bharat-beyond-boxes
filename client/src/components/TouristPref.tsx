@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { useAuth } from "../contexts";
-import { BGuidePref, BHostPref, BTouristPref } from "../types";
+import { BTouristPref } from "../types";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -14,10 +14,8 @@ const TouristPref = () => {
     try {
       const dummyData: BTouristPref = {
         languages: ["English"],
-        interests: ["luxury", "nature"],
         foodHabits: "non-veg",
         destination: "Delhi",
-        accommodation: "Guest House",
         familyMembers: 1,
         comfortableHosting: 3,
         price: 5000,
@@ -38,12 +36,7 @@ const TouristPref = () => {
       {auth.userPref && (
         <ul>
           {Object.keys(auth.userPref!).map((key) => {
-            return (
-              <li key={key}>
-                {key}:{" "}
-                {`${auth.userPref![key as keyof BHostPref | keyof BGuidePref | keyof BTouristPref]}`}
-              </li>
-            );
+            return <li key={key}>{key}: </li>;
           })}
         </ul>
       )}

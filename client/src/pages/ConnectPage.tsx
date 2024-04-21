@@ -1,13 +1,9 @@
 import { useContext, useEffect } from "react";
 import { useAuth } from "../contexts";
 import { useNavigate } from "react-router-dom";
-import { BUserDetails } from "../types";
 import HostHome from "../components/HostHome";
 import TouristHome from "../components/TouristHome";
 import GuideHome from "../components/GuideHome";
-import TouristPref from "../components/TouristPref";
-import HostPref from "../components/HostPref";
-import GuidePref from "../components/GuidePref";
 import { MessageContext } from "../contexts/MessageContext";
 import { Link } from "react-router-dom";
 
