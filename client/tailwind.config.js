@@ -7,6 +7,7 @@ export default {
         bg: {
           main: "rgba(243, 83, 44, 1)",
           light: "rgba(253, 166, 103, 0.6)",
+          secondary: "rgba(237, 94, 59, 1)",
         },
       },
     },
