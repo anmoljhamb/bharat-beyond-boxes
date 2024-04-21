@@ -1,16 +1,21 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { BUserDetails, Chats, Message } from "../types";
 import { useAuth } from "../contexts";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
   onSnapshot,
   orderBy,
   query,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate, useLocation } from "react-router-dom";
+import { cn } from "../utils";
+import { IoSend } from "react-icons/io5";
+import Markdown from "react-markdown";
 
 const ChatsPage = () => {
   const auth = useAuth();
@@ -21,6 +26,8 @@ const ChatsPage = () => {
   const location = useLocation();
   const [selectedChat, setSelectedChat] = useState("");
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
+  const chatWindow = useRef<HTMLElement>(null);
+  const [userInput, setUserInput] = useState<string>("");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -62,6 +69,17 @@ const ChatsPage = () => {
     });
   }, [chatHistory]);
 
+  const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(userInput);
+    await addDoc(collection(db, "chats", selectedChat, "messages"), {
+      createdAt: serverTimestamp(),
+      message: userInput,
+      uid: auth.currentUser!.uid,
+    });
+    setUserInput("");
+  };
+
   useEffect(() => {
     const unsub = onSnapshot(
       doc(db, "userChats", auth.currentUser!.uid),
@@ -89,39 +107,116 @@ const ChatsPage = () => {
   }, [auth.currentUser]);
 
   return (
-    <section className="pt-14">
-      <div>ChatsPage</div>
-      {Object.keys(userChats).length === 0 && <p>Chats Not Found!</p>}
-      {Object.keys(userChats).length > 0 && (
-        <>
-          {Object.keys(userChats).map((hashed) => {
-            const uid = userChats[hashed].uid;
-            const userName = usersInfo[uid];
-            return (
-              <p
-                key={hashed}
-                onClick={() => {
-                  navigate(`?selectedChat=${hashed}`);
-                  setSelectedChat(hashed);
-                }}
-              >
-                {userName.name}
-              </p>
-            );
-          })}
-        </>
-      )}
-      {selectedChat.length === 0 && <p>No Selected Chats</p>}
-      {selectedChat.length > 0 &&
-        selectedChat in userChats &&
-        userChats[selectedChat].uid in usersInfo && (
-          <ul>
-            <h1> Chat with {usersInfo[userChats[selectedChat].uid].name}</h1>
-            {chatHistory.map((chat, index) => {
-              return <li key={index}>{chat.message}</li>;
+    <section className="w-full h-screen pt-14 flex flex-row">
+      <div className="w-1/4 bg-black">
+        <h1 className="text-3xl text-white z-10 text-center my-2 font-bold">
+          Chats
+        </h1>
+
+        {Object.keys(userChats).length === 0 && <p>Chats Not Found!</p>}
+        {Object.keys(userChats).length > 0 && (
+          <ul className="text-white my-4">
+            {Object.keys(userChats).map((hashed) => {
+              const uid = userChats[hashed].uid;
+              const userName = usersInfo[uid];
+              return (
+                <li
+                  key={hashed}
+                  onClick={() => {
+                    navigate(`?selectedchat=${hashed}`);
+                    setSelectedChat(hashed);
+                  }}
+                  className={cn(
+                    "w-full cursor-pointer text-center px-2 py-4 font-semibold text-2xl",
+                    hashed === selectedChat ? "bg-bg-main" : "bg-black",
+                  )}
+                >
+                  {userName.name}
+                </li>
+              );
             })}
           </ul>
         )}
+      </div>
+      <div className="w-3/4 bg-bg-light flex flex-col">
+        <h1 className="text-3xl font-semibold">
+          {selectedChat.length === 0 && <p>No Selected Chats</p>}
+          {selectedChat.length > 0 &&
+            selectedChat in userChats &&
+            userChats[selectedChat].uid in usersInfo && (
+              <ul>
+                <h1 className="text-center my-4">
+                  {" "}
+                  Chatting with {usersInfo[userChats[selectedChat].uid].name}
+                </h1>
+              </ul>
+            )}
+        </h1>
+        <section
+          ref={chatWindow}
+          className={cn(
+            "duration-500 scroll-smooth ease-in-out transition-all",
+            "flex-grow h-full overflow-y-auto text-white flex flex-col p-4",
+          )}
+        >
+          <>
+            {chatHistory.map((message, index) => {
+              const isBotMessage = message.uid !== auth.currentUser!.uid;
+              return (
+                <div
+                  className={cn(
+                    "w-full flex",
+                    isBotMessage ? "justify-start" : "justify-end",
+                  )}
+                  key={index}
+                >
+                  <div
+                    className={cn(
+                      "my-1 p-2 w-[65%] rounded-sm py-3 transition-all duration-300 ease-in-out",
+                      isBotMessage
+                        ? "bg-bg-main text-white"
+                        : "bg-white text-bg-main",
+                    )}
+                  >
+                    <Markdown>{message.message}</Markdown>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        </section>
+        <div
+          className={cn("h-16 flex flex-col justify-center items-center px-6")}
+        >
+          <div className="w-full flex justify-center items-center">
+            <form onSubmit={handleOnSubmit} className="w-full relative">
+              <input
+                value={userInput}
+                type="text"
+                className={cn(
+                  "transition-all duration-300",
+                  "bg-background-main border-2 border-primary-50 text-text-main p-2",
+                  "w-full flex-grow rounded-sm focus:outline-none h-12 pl-4 pr-16",
+                )}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setUserInput(e.target.value);
+                }}
+              />
+              <button
+                disabled={userInput.length === 0}
+                className={cn(
+                  "transition-all duration-300 ease-in-out",
+                  "rounded-2xl text-primary-main text-2xl flex justify-center items-center",
+                  "h-10 w-10 absolute bg-white left-auto right-2 top-1/2 -translate-y-1/2 disabled:opacity-60",
+                )}
+                type="submit"
+              >
+                <IoSend />
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
