@@ -59,19 +59,13 @@ const ConnectPage = () => {
 
       {auth.userDetails &&
         auth.userDetails.role === "host" &&
-        (auth.userPref ? <HostHome /> : "Please Add your pref")}
+        auth.userPref && <HostHome />}
       {auth.userDetails &&
         auth.userDetails.role === "guide" &&
-        (auth.userPref ? <GuideHome /> : "Please Add your pref")}
+        auth.userPref && <GuideHome />}
       {auth.userDetails &&
         auth.userDetails.role === "tourist" &&
-        (auth.userPref ? <TouristHome /> : "Please Add your pref")}
-
-      {auth.userDetails && auth.userDetails.role === "host" && <HostPref />}
-      {auth.userDetails && auth.userDetails.role === "guide" && <GuidePref />}
-      {auth.userDetails && auth.userDetails.role === "tourist" && (
-        <TouristPref />
-      )}
+        auth.userPref && <TouristHome />}
     </section>
   );
 };
