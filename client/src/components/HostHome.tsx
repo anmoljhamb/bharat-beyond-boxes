@@ -36,7 +36,7 @@ const HostHome = () => {
           </div>
           <p className="text-lg text-center">
             Checkout the{" "}
-            <Link className="text-blue" to={"/chats"}>
+            <Link className="text-blue-500" to={"/chats"}>
               Chat
             </Link>{" "}
             section to look out for opportunities.
